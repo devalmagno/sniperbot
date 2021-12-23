@@ -1,0 +1,18 @@
+{
+  "name": "sniperbotv1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "sniper": "set NODE_ENV=test && node ./app.js",
+
+    "buy": "set NODE_ENV=dev && node dev/BuySellTokens/buy.js",
+    "buytest": "set NODE_ENV=test && node dev/BuySellTokens/buy.js",
+
+    "sell": "set NODE_ENV=dev && node dev/BuySellTokens/sell.js",
+    "selltest": "set NODE_ENV=test && node dev/BuySellTokens/sell.js"
+  },
+  "dependencies": {
+    "ethers": "^5.5.2"
+  }
+}
