@@ -78,10 +78,6 @@ const startConnection = () => {
                                 value: tx.value,
                             });
 
-                            console.log(
-                                `Checking if ${decodedInput.args[0]} matches Token: ${purchaseToken}`
-                            );
-
                             if (purchaseToken.toLowerCase() === decodedInput.args[0].toLowerCase()) {
                                 await buyToken(txHash);
                             }
@@ -133,6 +129,9 @@ const buyToken = async (txHash) => {
     );
 
     const receipt = await tx.wait();
+
+    console.log('Token Purchase complete');
+    console.log(`Associated LP Event txHash: ${txHash}`);
 
     console.log(
         `View on bscscan: ${
