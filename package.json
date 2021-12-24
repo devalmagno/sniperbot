@@ -6,8 +6,8 @@
   "scripts": {
     "sniper": "set NODE_ENV=test && node ./app.js",
 
-    "buy": "set NODE_ENV=dev && node dev/BuySellTokens/buy.js",
-    "buytest": "set NODE_ENV=test && node dev/BuySellTokens/buy.js",
+    "buy": "set NODE_ENV=dev && node ./dev/BuySellTokens/buy.js",
+    "buytest": "set NODE_ENV=test && node ./dev/BuySellTokens/buy.js",
 
     "sell": "set NODE_ENV=dev && node dev/BuySellTokens/sell.js",
     "selltest": "set NODE_ENV=test && node dev/BuySellTokens/sell.js"
