@@ -31,6 +31,7 @@ const wbnb = isTestnet ? wbnbTestNet : wbnbToken;
 const purchaseToken = isTestnet ? targetTokenTestnet : targetToken;
 const purchaseAmount = ethers.utils.parseUnits(amount, "ether");
 const pcs = isTestnet ? pcsTestnet : pcsRouter;
+const senderAdress = isTestnet ? addressTestnet : address;
 
 const pcsAbi = new ethers.utils.Interface(isTestnet ? abiTestnet : abi);
 
@@ -113,17 +114,17 @@ const buyToken = async (txHash) => {
         purchaseToken,
     ]);
     const amountOutMin = amounts[1].sub(amounts[1].div(slippage));
-    // const nonce = await account.getTransactionCount();
+    const nonce = await account.getTransactionCount();
 
     const tx = await router.swapExactETHForTokensSupportingFeeOnTransferTokens(
         amountOutMin,
         [wbnb, purchaseToken],
-        isTestnet ? addressTestnet : address,
-        Date.now() + 1000 * 60 * 5,
+        senderAdress,
+        Date.now() + 300000, // 1000 * 60 * 5
         {
             value: purchaseAmount,
             gasLimit: 345684,
-            gasPrice: ethers.utils.parseUnits("10", "gwei"),
+            gasPrice: ethers.utils.parseUnits("50", "gwei"),
             // nonce,
         }
     );

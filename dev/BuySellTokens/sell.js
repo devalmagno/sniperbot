@@ -15,11 +15,11 @@ const {
     wbnbTestNet,
     wbnbToken,
     slippage,
-} = require("./config");
-const abi = require("./abi.json");
-const abiTestnet = require("./testnetAbi.json");
-const contractAbi = require("./contractAbi.json");
-const contractAbiTn = require("./contractAbiTn.json");
+} = require("../../config");
+const abi = require("../../abi.json");
+const abiTestnet = require("../../testnetAbi.json");
+const contractAbi = require("../../contractAbi.json");
+const contractAbiTn = require("../../contractAbiTn.json");
 
 const checkIfTestnet = () => {
     return process.env.NODE_ENV.trim() === "test";

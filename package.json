@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "sniper": "set NODE_ENV=test && node ./app.js",
+    "snipadev": "set NODE_ENV=dev && node ./app.js",
 
     "buy": "set NODE_ENV=dev && node ./dev/BuySellTokens/buy.js",
     "buytest": "set NODE_ENV=test && node ./dev/BuySellTokens/buy.js",
