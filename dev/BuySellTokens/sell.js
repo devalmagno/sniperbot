@@ -4,8 +4,8 @@ const {
     address,
     addressTestnet,
     amount,
-    bscProvider,
-    bscTestNetProvider,
+    bscWebSocket,
+    testnetWebsocket,
     pcsRouter,
     pcsTestnet,
     privateKey,
@@ -31,8 +31,8 @@ const wbnb = isTestnet ? wbnbTestNet : wbnbToken;
 const purchaseToken = isTestnet ? targetTokenTestnet : targetToken;
 const pcs = isTestnet ? pcsTestnet : pcsRouter;
 
-const provider = new ethers.getDefaultProvider(
-    isTestnet ? bscTestNetProvider : bscProvider
+const provider = new ethers.providers.WebSocketProvider(
+    isTestnet ? testnetWebsocket : bscWebSocket
 );
 
 const account = new ethers.Wallet(
@@ -47,6 +47,12 @@ const erc = new ethers.Contract(
     isTestnet ? contractAbiTn : contractAbi,
     account
 );
+
+const startConnection = () => {
+    provider._websocket.on("open", () => {
+        sell();
+    }); 
+}
 
 async function sell() {
     const balance = await erc.balanceOf(account.address);
@@ -83,4 +89,4 @@ async function sell() {
     process.exit();
 }
 
-sell();
+startConnection();

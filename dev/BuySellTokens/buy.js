@@ -7,6 +7,8 @@ const {
     amount,
     bscProvider,
     bscTestNetProvider,
+    bscWebSocket,
+    testnetWebsocket,
     pcsRouter,
     pcsTestnet,
     privateKey,
@@ -19,6 +21,7 @@ const {
 } = require("../../config");
 const abi = require("../../abi.json");
 const abiTestnet = require("../../testnetAbi.json");
+const { start } = require("repl");
 
 const checkIfTestnet = () => {
     return process.env.NODE_ENV.trim() === "test";
@@ -26,18 +29,14 @@ const checkIfTestnet = () => {
 
 const isTestnet = checkIfTestnet();
 
-const read = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
 const wbnb = isTestnet ? wbnbTestNet : wbnbToken;
-let purchaseToken = "";
+let purchaseToken = isTestnet ? targetTokenTestnet : targetToken;
 const purchaseAmount = ethers.utils.parseUnits(amount, "ether");
 const pcs = isTestnet ? pcsTestnet : pcsRouter;
+const senderAddress = isTestnet ? addressTestnet : address;
 
-const provider = new ethers.getDefaultProvider(
-    isTestnet ? bscTestNetProvider : bscProvider
+const provider = new ethers.providers.WebSocketProvider(
+    isTestnet ? testnetWebsocket : bscWebSocket
 );
 
 const account = new ethers.Wallet(
@@ -51,12 +50,11 @@ const router = new ethers.Contract(
     account
 );
 
-read.question("Purchase token:", answer => {
-    purchaseToken = answer;
-    console.log("\n");
-    read.close();
-    buy();
-});
+const startConnection = () => {
+    provider._websocket.on("open", () => {
+        buy();
+    }); 
+}
 
 async function buy() {
     const amounts = await router.getAmountsOut(purchaseAmount, [
@@ -64,18 +62,18 @@ async function buy() {
         purchaseToken
     ]);
     const amountOutMin = amounts[1].sub(amounts[1].div(slippage));
-    const nonce = await account.getTransactionCount();
+    // const nonce = await account.getTransactionCount();
 
     const tx = await router.swapExactETHForTokensSupportingFeeOnTransferTokens(
         amountOutMin,
         [wbnb, purchaseToken],
-        isTestnet ? addressTestnet : address,
-        Date.now() + 1000 * 60 * 5,
+        senderAddress,
+        Date.now() + 300000,
         {
             value: purchaseAmount,
             gasLimit: 345684,
             gasPrice: ethers.utils.parseUnits("10", "gwei"),
-            nonce
+            // nonce
         }
     );
 
@@ -85,3 +83,5 @@ async function buy() {
 
     process.exit();
 }
+
+startConnection();

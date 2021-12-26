@@ -38,10 +38,6 @@ const pcsAbi = new ethers.utils.Interface(isTestnet ? abiTestnet : abi);
 const EXPECTED_PONG_BACK = 30000;
 const KEEP_ALIVE_CHECK_INTERVAL = 15000;
 
-// const provider = new ethers.getDefaultProvider(
-// isTestnet ?  : bscProvider
-// );
-
 const provider = new ethers.providers.WebSocketProvider(
     isTestnet ? testnetWebsocket : bscWebSocket
 );
@@ -114,7 +110,7 @@ const buyToken = async (txHash) => {
         purchaseToken,
     ]);
     const amountOutMin = amounts[1].sub(amounts[1].div(slippage));
-    const nonce = await account.getTransactionCount();
+    // const nonce = await account.getTransactionCount();
 
     const tx = await router.swapExactETHForTokensSupportingFeeOnTransferTokens(
         amountOutMin,
